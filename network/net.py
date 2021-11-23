@@ -2,8 +2,6 @@ from torch import nn
 
 
 class Net(nn.Module):
-    # 921 600 -> 614 404 -> 614 404 -> 4
-
     def __init__(self):
         super(Net, self).__init__()
 
@@ -35,4 +33,3 @@ class Net(nn.Module):
 
         # Return the result
         return x
-    
