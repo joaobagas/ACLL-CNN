@@ -16,8 +16,8 @@ class Net(nn.Module):
         self.pool = nn.AvgPool2d(2, 2)  # Half the dimension size
 
         # Instantiate a fully connected layer
-        neurons_left = int(921600 / 4)
-        self.fc = nn.Linear(neurons_left, 4)
+        # 480 / 4 = 120 | 640 / 4 = 160
+        self.fc = nn.Linear(12 * 120 * 160, 4)
 
     def forward(self, x):
         # Apply conv followed by relu, then in next line pool
@@ -29,6 +29,7 @@ class Net(nn.Module):
         x = self.pool(x)
 
         # Apply the fully connected layer
+        x = x.view(-1, 12 * 120 * 160)
         x = self.fc(x)
 
         # Return the result
