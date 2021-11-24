@@ -17,7 +17,7 @@ class Net(nn.Module):
 
         # Instantiate a fully connected layer
         # 480 / 4 = 120 | 640 / 4 = 160
-        self.fc = nn.Linear(12 * 120 * 160, 4)
+        self.fc = nn.Linear(2304000, 4)
 
     def forward(self, x):
         # Apply conv followed by relu, then in next line pool
@@ -29,7 +29,8 @@ class Net(nn.Module):
         x = self.pool(x)
 
         # Apply the fully connected layer
-        x = x.view(-1, 12 * 120 * 160)
+        # 12 * 120 * 160
+        x = x.view(-1, 2304000)
         x = self.fc(x)
 
         # Return the result

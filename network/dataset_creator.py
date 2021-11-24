@@ -1,3 +1,4 @@
+import os
 from random import random, uniform
 
 from PIL import Image, ImageEnhance
@@ -10,6 +11,7 @@ def create_dataset(inputs, output_dir):
         count += 1
         img = Image.open(i)
         br, co, sa, sh = uniform(0.2, 5), uniform(0.2, 5), uniform(0.2, 5), uniform(0.2, 5)
+        img = img.resize((640, 480))
         img = change_brightness(img, br)
         img = change_contrast(img, co)
         img = change_saturation(img, sa)
@@ -45,8 +47,11 @@ def load_labels(folder):
     with open(folder + "/labels.csv", newline='') as csv_file:
         for row in csv_file:
             split_row = row.split(",")
-            labels.append([split_row[1], split_row[2], split_row[3], split_row[4]])
+            labels.append([float(split_row[1]), float(split_row[2]), float(split_row[3]), float(split_row[4].split("\n")[0])])
     return labels
 
-
-create_dataset(["/home/bernardo/Desktop/Images/No animals/1-10/landscape-photography-15.jpg"], "/home/bernardo/Desktop/Images/No animals/Dataset1")
+paths = os.listdir("/home/bernardo/Desktop/Images/No animals/1-10")
+test = []
+for path in paths:
+    test.append("/home/bernardo/Desktop/Images/No animals/1-10/" + path)
+create_dataset(test, "/home/bernardo/Desktop/Images/No animals/Dataset1")
