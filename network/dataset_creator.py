@@ -1,6 +1,6 @@
 import os
 from random import random, uniform
-
+from numpy import log, exp
 from PIL import Image, ImageEnhance
 
 
@@ -10,13 +10,13 @@ def create_dataset(inputs, output_dir):
     for i in inputs:
         count += 1
         img = Image.open(i)
-        br, co, sa, sh = uniform(0.2, 5), uniform(0.2, 5), uniform(0.2, 5), uniform(0.2, 5)
+        br, co, sa, sh = uniform(-1.6, 1.6), uniform(-1.6, 1.6), uniform(-1.6, 1.6), uniform(-1.6, 1.6)
         img = img.resize((640, 480))
-        img = change_brightness(img, br)
-        img = change_contrast(img, co)
-        img = change_saturation(img, sa)
-        img = change_sharpness(img, sh)
-        csv += '{},{},{},{},{}\n'.format(count, 1/br, 1/co, 1/sa, 1/sh)
+        img = change_brightness(img, exp(br))
+        img = change_contrast(img, exp(co))
+        img = change_saturation(img, exp(sa))
+        img = change_sharpness(img, exp(sh))
+        csv += '{},{},{},{},{}\n'.format(count, -br, -co, -sa, -sh)
         img.save(output_dir + '/{}.jpg'.format(count))
     f = open(output_dir + "/labels.csv", "w+")
     f.write(csv)
@@ -50,8 +50,8 @@ def load_labels(folder):
             labels.append([float(split_row[1]), float(split_row[2]), float(split_row[3]), float(split_row[4].split("\n")[0])])
     return labels
 
-paths = os.listdir("/home/bernardo/Desktop/Images/No animals/1-10")
+paths = os.listdir("/home/bernardo/Desktop/Images/No animals/og")
 test = []
 for path in paths:
-    test.append("/home/bernardo/Desktop/Images/No animals/1-10/" + path)
+    test.append("/home/bernardo/Desktop/Images/No animals/og/" + path)
 create_dataset(test, "/home/bernardo/Desktop/Images/No animals/Dataset1")
