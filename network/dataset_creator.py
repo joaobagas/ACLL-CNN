@@ -50,8 +50,8 @@ def load_labels(folder):
             labels.append([float(split_row[1]), float(split_row[2]), float(split_row[3]), float(split_row[4].split("\n")[0])])
     return labels
 
-paths = os.listdir("/home/bernardo/Desktop/Images/No animals/og")
+paths = os.listdir("/home/bernardo/Desktop/NordicDenmark")
 test = []
 for path in paths:
-    test.append("/home/bernardo/Desktop/Images/No animals/og/" + path)
+    test.append("/home/bernardo/Desktop/NordicDenmark/" + path)
 create_dataset(test, "/home/bernardo/Desktop/Images/No animals/Dataset1")

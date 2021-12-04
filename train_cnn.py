@@ -3,51 +3,53 @@ from torch import nn, optim
 from torchvision import datasets
 from torchvision.transforms import transforms
 
+from network import model_loader
 from network.dataset_creator import load_labels
-from network.loss_function import compute_score
 from network.module import Net
 
-net = Net()
+BATCH_SIZE = 5
+LEARNING_RATE = 3e-4
+NUM_EPOCHS = 50
+
+# net = Net()
+# current_epoch = 0
+net, current_epoch, loss = model_loader.load()
 criterion = nn.MSELoss()
-optimizer = optim.SGD(net.parameters(), lr=3e-4)
-path = "/home/bernardo/Desktop/Images/No animals/Dataset1"
+optimizer = optim.SGD(net.parameters(), lr=LEARNING_RATE)
 
 transform = transforms.ToTensor()
-dataset = datasets.ImageFolder(path, transform=transform)
-dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True)
+train_path = "datasets/acll/train"
+train_set = datasets.ImageFolder(train_path, transform=transform)
+train_loader = torch.utils.data.DataLoader(train_set, batch_size=5, shuffle=False)
 
+net.train()
 
-for i, data in enumerate(dataloader, 0):
-    inputs, labels_not_used = data
-    labels = load_labels(path)
+print("Training...")
 
-    # Forward + Backward + Optimize
-    outputs = net.forward(inputs)
-    loss = criterion(outputs, torch.Tensor(labels[i]).unsqueeze(0))
-    loss.backward()
-    optimizer.step()
-    optimizer.zero_grad()
+for e in range(NUM_EPOCHS):
+    count = 0
+    for i, data in enumerate(train_loader, 0):
+        inputs, _ = data
+        labels = load_labels(train_path)
 
+        # Forward + Backward + Optimize
+        try:
+            outputs = net.forward(inputs)
+            loss = criterion(outputs, torch.Tensor(labels[count:count + BATCH_SIZE]))
 
-print("Finished training!")
+            optimizer.zero_grad()
+            loss.backward()
 
-correct, total = 0, 0
-predictions = []
-net.eval()
+            optimizer.step()
+            count += BATCH_SIZE
+        except:
+            print("There was an error!")
+    current_epoch += 1
+    print("Finished epoch {}!".format(current_epoch))
 
-for i, data in enumerate(dataloader, 0):
-    inputs, labels = data
-    labels = load_labels(path)
-    labels = torch.Tensor(labels)
+print("Finished training, saving...")
+model_loader.save(net, optimizer, current_epoch, loss)
+print("Saved!")
 
-    outputs = net.forward(inputs)
-    _, predicted = torch.max(outputs.data, 1)
-    predictions.append(outputs)
-    total += labels.size(0)
-    print("pred: " + str(predictions[i].tolist()[0]))
-    print("labl: " + str(labels.tolist()[i]))
-    correct += (predicted == labels).sum().item()
-
-print("The testing is done! " + str(correct) + "/" + str(total))
 
 

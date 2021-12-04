@@ -13,18 +13,15 @@ class Net(nn.Module):
             nn.Conv2d(6, 12, (3, 3), (1, 1), (1, 1), bias=True),
             nn.ReLU(inplace=True),
             nn.AvgPool2d(2, 2),
-            nn.Conv2d(12, 12, (3, 3), (1, 1), (1, 1), bias=True),
-            nn.ReLU(inplace=True),
-            nn.AvgPool2d(2, 2),
+            nn.AvgPool2d(2, 2)
         )
 
         # Instantiate fully connected layers
         self.fc = nn.Sequential(
-            nn.Linear(57600, 300),
+            nn.Linear(57600, 3600),
             nn.ReLU(inplace=True),
-            nn.Linear(300, 4)
+            nn.Linear(3600, 4)
         )
-
 
     def forward(self, x):
         x = self.conv(x)
