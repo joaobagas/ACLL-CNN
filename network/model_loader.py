@@ -5,7 +5,7 @@ from network.module import Net
 
 
 def save(net, optimizer, epoch, loss):
-    PATH = "checkpoint/model.pt"
+    PATH = "checkpoint/model{}.pt".format(epoch)
 
     torch.save({
         'epoch': epoch,
@@ -17,7 +17,7 @@ def save(net, optimizer, epoch, loss):
 
 def load():
     model = Net()
-    PATH = "checkpoint/model.pt"
+    PATH = "checkpoint/model1500.pt"
     optimizer = optim.SGD(model.parameters(), lr=3e-4)
 
     checkpoint = torch.load(PATH)
