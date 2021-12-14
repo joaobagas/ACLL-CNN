@@ -12,11 +12,11 @@ def create_dataset(input_dir, output_dir):
 
     count = 0
     csv = ""
-    for a in range(3):
+    for a in range(1):
         for i in paths:
             count += 1
             img = Image.open(i)
-            br, co, sa = uniform(-1.6, 1.6), uniform(-1.6, 1.6), uniform(-1.6, 1.6)
+            br, co, sa = uniform(-0.4, 0.4), uniform(-0.4, 0.4), uniform(-0.4, 0.4)
             img = img.resize((200, 200))
             img = change_brightness(img, exp(br))
             img = change_contrast(img, exp(co))

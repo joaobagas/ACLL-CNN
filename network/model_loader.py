@@ -17,12 +17,11 @@ def save(net, optimizer, epoch, loss):
 
 def load():
     model = Net()
-    PATH = "checkpoint/model1500.pt"
-    optimizer = optim.SGD(model.parameters(), lr=3e-4)
+    PATH = "checkpoint/model.pt"
 
     checkpoint = torch.load(PATH)
     model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     return model, epoch, loss
