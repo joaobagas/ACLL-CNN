@@ -17,7 +17,7 @@ def save(net, optimizer, epoch, loss):
 
 def load():
     model = Net()
-    PATH = "checkpoint/model.pt"
+    PATH = "checkpoint/model1000.pt"
 
     checkpoint = torch.load(PATH)
     model.load_state_dict(checkpoint['model_state_dict'])

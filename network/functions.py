@@ -7,13 +7,13 @@ from network.dataset_creator import load_labels
 from network.module import Net
 
 
-def train(load_model, batch_size, num_epochs, min_loss, train_path):
+def train(load_model, batch_size, num_epochs, learning_rate, min_loss, train_path):
     if load_model:
         net, current_epoch, loss = model_loader.load()
     else:
         net, current_epoch = Net(), 0
     criterion = nn.MSELoss()
-    optimizer = optim.SGD(net.parameters(), lr=0.0005, weight_decay=0.001) # 3e-4
+    optimizer = optim.SGD(net.parameters(), lr=learning_rate, weight_decay=0.001) # 3e-4
 
     transform = transforms.Compose([transforms.ToTensor(),
                                     transforms.Resize((200, 200))])
